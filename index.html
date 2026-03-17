@@ -1,286 +1,383 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Café 2026 | Tech Studio</title>
-    <style>
-        :root {
-            --bg: #030305;
-            --accent: #6366f1;
-            --yt-red: #ff0000;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --text-main: #ffffff;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Digital Café 2026 – m2 (opravený footer)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --accent: #6366f1;
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --text-dim: #a0a0ff;
+      --green-online: #4ade80;
+    }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: system-ui, -apple-system, sans-serif;
-            overflow-x: hidden;
-            perspective: 1200px;
-        }
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        #neural-flow {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; pointer-events: none; opacity: 1;
-        }
+    main {
+      flex: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 2rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
 
-        main {
-            position: relative; z-index: 2;
-            max-width: 1200px; margin: 0 auto;
-            padding: 3vh 20px;
-            display: flex; flex-direction: column; 
-            gap: 30px;
-        }
+    .hero { text-align: center; padding: 2.5rem 1rem 1rem; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 11vw, 7rem);
+      font-weight: 900;
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
 
-        /* HERO */
-        .hero { text-align: center; transform: translateZ(50px); margin-bottom: -10px; }
-        .hero h1 {
-            font-size: clamp(3rem, 15vw, 10rem);
-            font-weight: 900;
-            background: linear-gradient(180deg, #fff 30%, var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.6));
-            letter-spacing: -0.05em; transform: skewX(-2deg);
-        }
+    .carousel-container {
+      width: 100%;
+      max-width: 1152px;
+      margin: 0 auto;
+      position: relative;
+    }
 
-        /* INTERAKTIVNÍ CAROUSEL */
-        .carousel-wrapper {
-            width: 100%; position: relative;
-            transform-style: preserve-3d;
-        }
+    .carousel-3d {
+      width: 100%;
+      aspect-ratio: 16 / 6;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      background: #111;
+      transition: aspect-ratio 0.4s ease;
+    }
 
-        input[name="slides"] { display: none; }
+    .carousel-track {
+      display: flex;
+      width: 300%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.77,0,0.175,1);
+    }
 
-        .carousel-3d {
-            width: 100%; aspect-ratio: 16 / 4.5; border-radius: 20px;
-            position: relative; overflow: hidden; border: 1px solid var(--glass-border);
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-        }
+    .slide {
+      width: 33.33%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 6%;
+      text-align: center;
+    }
 
-        .carousel-track {
-            display: flex; width: 500%; height: 100%;
-            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-        }
+    .slide-1 { background: linear-gradient(135deg, #1e1b4b, #312e81); }
+    .slide-2 { background: linear-gradient(135deg, #312e81, #4338ca); }
+    .slide-3 { background: linear-gradient(135deg, #4338ca, #6366f1); }
 
-        .slide { width: 20%; height: 100%; display: flex; align-items: center; padding-left: 8%; position: relative; }
-        .slide-content h2 { font-size: clamp(1.8rem, 5vw, 4rem); font-weight: 900; text-shadow: 0 0 20px rgba(0,0,0,1); }
+    input[name="slides"] { display: none; }
 
-        #slide1:checked ~ .carousel-3d .carousel-track { transform: translateX(0); }
-        #slide2:checked ~ .carousel-3d .carousel-track { transform: translateX(-20%); }
-        #slide3:checked ~ .carousel-3d .carousel-track { transform: translateX(-40%); }
-        #slide4:checked ~ .carousel-3d .carousel-track { transform: translateX(-60%); }
-        #slide5:checked ~ .carousel-3d .carousel-track { transform: translateX(-80%); }
+    #slide1:checked ~ .carousel-3d .carousel-track { transform: translateX(0); }
+    #slide2:checked ~ .carousel-3d .carousel-track { transform: translateX(-33.33%); }
+    #slide3:checked ~ .carousel-3d .carousel-track { transform: translateX(-66.66%); }
 
-        .carousel-dots {
-            position: absolute; bottom: 20px; left: 50%;
-            transform: translateX(-50%); display: flex; gap: 10px; z-index: 10;
-        }
-        .dot {
-            width: 12px; height: 12px; border-radius: 50%;
-            background: rgba(255,255,255,0.2); cursor: pointer;
-            border: 1px solid var(--glass-border); transition: 0.3s;
-        }
-        #slide1:checked ~ .carousel-dots label[for="slide1"],
-        #slide2:checked ~ .carousel-dots label[for="slide2"],
-        #slide3:checked ~ .carousel-dots label[for="slide3"],
-        #slide4:checked ~ .carousel-dots label[for="slide4"],
-        #slide5:checked ~ .carousel-dots label[for="slide5"] {
-            background: var(--accent); width: 30px; border-radius: 10px;
-            box-shadow: 0 0 15px var(--accent);
-        }
+    .carousel-dots {
+      position: absolute;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.9rem;
+      z-index: 10;
+    }
 
-        /* BENTO GRID */
-        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .bento-item {
-            aspect-ratio: 16 / 9; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
-            border-radius: 15px; padding: 20px; display: flex; flex-direction: column; justify-content: flex-end;
-            position: relative; overflow: hidden; transition: 0.3s;
-        }
-        .bento-item:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(99, 102, 241, 0.1); }
-        .bento-item h3 { font-size: 1.2rem; font-weight: 800; }
+    .carousel-dots label {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-        /* FOOTER & TICKER */
-        .hyper-footer { margin-top: 10px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
-        
-        .ticker-wrap {
-            width: 100%; overflow: hidden; 
-            background: rgba(255, 0, 0, 0.15); 
-            border: 1px solid var(--yt-red); 
-            padding: 10px 0; margin-bottom: 20px; border-radius: 10px;
-            box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.2);
-        }
-        
-        .ticker { display: flex; white-space: nowrap; animation: ticker-move 10s linear infinite; } /* 200% speed */
-        .ticker-item { display: flex; align-items: center; padding: 0 40px; font-size: 0.85rem; letter-spacing: 1px; }
-        .ticker-title { font-weight: 900; color: #fff; margin-right: 10px; text-transform: uppercase; }
-        .yt-label { color: #fff; background: var(--yt-red); font-weight: 800; font-size: 0.65rem; margin-left: 8px; padding: 2px 6px; border-radius: 3px; }
+    #slide1:checked ~ .carousel-dots label[for="slide1"],
+    #slide2:checked ~ .carousel-dots label[for="slide2"],
+    #slide3:checked ~ .carousel-dots label[for="slide3"] {
+      background: white;
+      transform: scale(1.35);
+      box-shadow: 0 0 12px rgba(255,255,255,0.5);
+    }
 
-        .footer-content { display: grid; grid-template-columns: 1.2fr 2fr; gap: 30px; margin-bottom: 20px; }
-        .footer-logo { font-size: 1.8rem; font-weight: 900; }
-        .footer-logo span { color: var(--yt-red); }
-        .yt-callout { font-size: 0.95rem; font-weight: 800; color: var(--yt-red); text-transform: uppercase; letter-spacing: 1px; }
+    /* Mobilní carousel */
+    @media (max-width: 640px) {
+      .carousel-3d {
+        aspect-ratio: 1 / 1;
+        border-radius: 1rem;
+        min-height: 320px;
+        max-height: 82vh;
+      }
+      .slide h2 { font-size: clamp(2.1rem, 9.2vw, 3.8rem) !important; }
+      .slide p  { font-size: clamp(0.92rem, 3.7vw, 1.08rem) !important; max-width: 92%; }
+      .slide { padding: 0 7%; }
+    }
 
-        .footer-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .link-group h4 { color: #fff; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.5; }
-        .link-group a { display: block; color: #fff; text-decoration: none; opacity: 0.4; font-size: 0.8rem; margin-bottom: 6px; transition: 0.2s; }
-        .link-group a:hover { opacity: 1; color: var(--accent); }
+    /* Bento */
+    .bento {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
 
-        .bottom-bar {
-            padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; font-size: 0.6rem; opacity: 0.4; letter-spacing: 2px;
-        }
+    .bento > div {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #777;
+    }
 
-        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @media (max-width: 900px) { .footer-content, .bento-grid { grid-template-columns: 1fr; } .carousel-3d { aspect-ratio: 1; } }
-    </style>
+    @media (min-width: 640px)  { .bento { grid-template-columns: repeat(2,1fr); } }
+    @media (min-width: 960px)  { .bento { grid-template-columns: repeat(3,1fr); } .carousel-3d { aspect-ratio: 16 / 4.5; } }
+
+    /* ────────────────────────────── OPRACENÝ FOOTER – mobilní verze kompaktní ────────────────────────────── */
+    footer {
+      border-top: 1px solid #222;
+      padding: 2.2rem 1.2rem 1.8rem;
+      background: rgba(0,0,0,0.25);
+      font-size: 0.92rem;
+      color: var(--text-dim);
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    .yt-callout {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
+
+    .link-group {
+      background: rgba(20,20,30,0.4);
+      padding: 1rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .link-group h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin-bottom: 0.7rem;
+      color: white;
+      opacity: 0.9;
+    }
+
+    .link-group a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      margin-bottom: 0.45rem;
+      font-size: 0.94rem;
+      transition: color 0.16s;
+    }
+
+    .link-group a:hover {
+      color: white;
+    }
+
+    .bottom-bar {
+      margin-top: 1.6rem;
+      padding-top: 1rem;
+      border-top: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      opacity: 0.78;
+    }
+
+    .bottom-bar .online {
+      color: var(--green-online);
+      font-weight: bold;
+      letter-spacing: 0.06em;
+    }
+
+    /* Desktop footer */
+    @media (min-width: 768px) {
+      footer { padding: 3.2rem 2rem 2.2rem; }
+      .footer-content {
+        grid-template-columns: 1.2fr 2fr;
+        gap: 3.5rem;
+      }
+      .footer-brand { text-align: left; }
+      .footer-links {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      .link-group {
+        background: transparent;
+        padding: 0;
+        border: none;
+      }
+      .bottom-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-content { gap: 5rem; }
+      .link-group a { font-size: 1rem; }
+    }
+
+    @media (max-width: 380px) {
+      .footer-links { gap: 1.1rem; }
+      .link-group { padding: 0.9rem 1rem; }
+      .link-group h4 { font-size: 0.76rem; margin-bottom: 0.6rem; }
+      .link-group a { font-size: 0.9rem; margin-bottom: 0.4rem; }
+    }
+  </style>
 </head>
 <body>
-    <canvas id="neural-flow"></canvas>
-    <main>
-        <header class="hero">
-            <h1>Digital Café</h1>
-        </header>
 
-        <section class="carousel-wrapper">
-            <input type="radio" name="slides" id="slide1" checked>
-            <input type="radio" name="slides" id="slide2">
-            <input type="radio" name="slides" id="slide3">
-            <input type="radio" name="slides" id="slide4">
-            <input type="radio" name="slides" id="slide5">
+<main>
+  <div class="hero">
+    <h1>Digital Café</h1>
+  </div>
 
-            <div class="carousel-3d">
-                <div class="carousel-track">
-                    <div class="slide"><div class="slide-content"><h2>Umělá inteligence</h2></div></div>
-                    <div class="slide"><div class="slide-content"><h2>Robotika</h2></div></div>
-                    <div class="slide"><div class="slide-content"><h2>Strojové učení</h2></div></div>
-                    <div class="slide"><div class="slide-content"><h2>3D Design</h2></div></div>
-                    <div class="slide"><div class="slide-content"><h2>Digital Café</h2></div></div>
-                </div>
-            </div>
+  <div class="carousel-container">
+    <input type="radio" name="slides" id="slide1" checked>
+    <input type="radio" name="slides" id="slide2">
+    <input type="radio" name="slides" id="slide3">
 
-            <div class="carousel-dots">
-                <label for="slide1" class="dot" onclick="manualControl(1)"></label>
-                <label for="slide2" class="dot" onclick="manualControl(2)"></label>
-                <label for="slide3" class="dot" onclick="manualControl(3)"></label>
-                <label for="slide4" class="dot" onclick="manualControl(4)"></label>
-                <label for="slide5" class="dot" onclick="manualControl(5)"></label>
-            </div>
-        </section>
+    <div class="carousel-3d">
+      <div class="carousel-track">
+        <div class="slide slide-1">
+          <span class="text-indigo-300 text-xs font-bold tracking-widest uppercase mb-3">Technologie 2026</span>
+          <h2 class="text-4xl md:text-6xl font-black leading-tight">UMĚLÁ<br>INTELIGENCE</h2>
+          <p class="text-indigo-200/65 mt-5 text-sm md:text-base max-w-md">Generativní modely přímo v prohlížeči.</p>
+        </div>
+        <div class="slide slide-2">
+          <span class="text-indigo-300 text-xs font-bold tracking-widest uppercase mb-3">UX & UI</span>
+          <h2 class="text-4xl md:text-6xl font-black leading-tight">INTERAKTIVNÍ<br>DESIGN</h2>
+          <p class="text-indigo-200/65 mt-5 text-sm md:text-base max-w-md">Pohlcující prostředí bez kompromisů.</p>
+        </div>
+        <div class="slide slide-3">
+          <span class="text-indigo-300 text-xs font-bold tracking-widest uppercase mb-3">Webové Standardy</span>
+          <h2 class="text-4xl md:text-6xl font-black leading-tight">BUDOUCNOST<br>WEBU</h2>
+          <p class="text-indigo-200/65 mt-5 text-sm md:text-base max-w-md">WebGPU a nové renderovací cesty.</p>
+        </div>
+      </div>
+    </div>
 
-        <section class="bento-grid">
-            <div class="bento-item"><h3>AI Evoluce</h3></div>
-            <div class="bento-item"><h3>Robotika</h3></div>
-            <div class="bento-item"><h3>Neural Flow</h3></div>
-        </section>
+    <div class="carousel-dots">
+      <label for="slide1"></label>
+      <label for="slide2"></label>
+      <label for="slide3"></label>
+    </div>
+  </div>
 
-        <footer class="hyper-footer">
-            <div class="ticker-wrap">
-                <div class="ticker">
-                    <div class="ticker-item"><span class="ticker-title">GPT-5 Deep Dive</span> <span class="yt-label">YouTube Video</span></div>
-                    <div class="ticker-item"><span class="ticker-title">Humanoidi 2026</span> <span class="yt-label">YouTube Video</span></div>
-                    <div class="ticker-item"><span class="ticker-title">Kvantový zlom</span> <span class="yt-label">YouTube Video</span></div>
-                    <div class="ticker-item"><span class="ticker-title">GPT-5 Deep Dive</span> <span class="yt-label">YouTube Video</span></div>
-                    <div class="ticker-item"><span class="ticker-title">Humanoidi 2026</span> <span class="yt-label">YouTube Video</span></div>
-                    <div class="ticker-item"><span class="ticker-title">Kvantový zlom</span> <span class="yt-label">YouTube Video</span></div>
-                </div>
-            </div>
+  <div class="bento">
+    <div>AI Evoluce</div>
+    <div>Robotika</div>
+    <div>Neural Flow</div>
+  </div>
+</main>
 
-            <div class="footer-content">
-                <div class="brand">
-                    <div class="footer-logo">DIGITAL<span>CAFÉ</span></div>
-                    <div class="yt-callout">Podcasty o AI každých 48 hodin</div>
-                </div>
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>Studio</h4>
-                        <a href="#">Showreel</a><a href="#">Projekty</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Labs</h4>
-                        <a href="#">AI Forge</a><a href="#">Robotics</a>
-                    </div>
-                    <div class="link-group">
-                        <h4>Kontakt</h4>
-                        <a href="mailto:studio@digitalcafe.cz">Email</a>
-                    </div>
-                </div>
-            </div>
-            <div class="bottom-bar">
-                <div>&copy; 2026 DIGITAL CAFÉ LABS</div>
-                <div style="color: #22c55e; font-weight: bold; opacity: 1;">STATION ONLINE</div>
-            </div>
-        </footer>
-    </main>
+<footer>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">DIGITAL<span>CAFÉ</span></div>
+      <div class="yt-callout">Podcasty o AI každých 48 hodin</div>
+    </div>
 
-    <script>
-        // --- SLIDER LOGIC ---
-        let currentSlide = 1;
-        let autoInterval;
-        let resumeTimeout;
+    <div class="footer-links">
+      <div class="link-group">
+        <h4>Studio</h4>
+        <a href="#">Showreel</a>
+        <a href="#">Projekty</a>
+        <a href="#">O nás</a>
+      </div>
+      <div class="link-group">
+        <h4>Labs</h4>
+        <a href="#">AI Forge</a>
+        <a href="#">Robotics</a>
+        <a href="#">Neural Experiments</a>
+      </div>
+      <div class="link-group">
+        <h4>Kontakt</h4>
+        <a href="mailto:studio@digitalcafe.cz">Email</a>
+        <a href="#">Discord</a>
+        <a href="#">YouTube</a>
+      </div>
+    </div>
+  </div>
 
-        function startAutoSlide() {
-            autoInterval = setInterval(() => {
-                currentSlide = currentSlide % 5 + 1;
-                const radio = document.getElementById(`slide${currentSlide}`);
-                if(radio) radio.checked = true;
-            }, 4000);
-        }
+  <div class="bottom-bar">
+    <div>© 2026 DIGITAL CAFÉ LABS • All rights reserved</div>
+    <div class="online">STATION ONLINE</div>
+  </div>
+</footer>
 
-        function manualControl(n) {
-            currentSlide = n;
-            clearInterval(autoInterval);
-            clearTimeout(resumeTimeout);
-            resumeTimeout = setTimeout(startAutoSlide, 3000);
-        }
-
-        startAutoSlide();
-
-        // --- NEURAL FLOW LOGIC ---
-        const canvas = document.getElementById('neural-flow');
-        const ctx = canvas.getContext('2d');
-        let pts = [];
-        
-        function init() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            pts = [];
-            for (let i = 0; i < 90; i++) {
-                pts.push({
-                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.8, vy: (Math.random() - 0.5) * 0.8,
-                    size: Math.random() * 2.5 + 1.5
-                });
-            }
-        }
-        
-        function anim() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < pts.length; i++) {
-                let p = pts[i]; p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                
-                ctx.fillStyle = 'rgba(99, 102, 241, 0.9)';
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-                
-                for (let j = i + 1; j < pts.length; j++) {
-                    let p2 = pts[j];
-                    let d = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (d < 220) {
-                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.6 * (1 - d / 220)})`;
-                        ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(anim);
-        }
-        window.addEventListener('resize', init);
-        init(); anim();
-    </script>
+<script>
+// carousel autoplay
+let cur = 1;
+let tmr;
+function start() {
+  tmr = setInterval(() => {
+    cur = cur % 3 + 1;
+    document.getElementById('slide' + cur).checked = true;
+  }, 2200);
+}
+function reset() {
+  clearInterval(tmr);
+  start();
+}
+start();
+document.querySelectorAll('input[name="slides"]').forEach(el => {
+  el.addEventListener('change', reset);
+});
+</script>
 </body>
 </html>
