@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Digital Café 2026 – m2 (opravený footer)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --accent: #6366f1;
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --text-dim: #a0a0ff;
+      --green-online: #4ade80;
+    }
+
+    body {
+      background: var(--bg);
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 2rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .hero { text-align: center; padding: 2.5rem 1rem 1rem; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 11vw, 7rem);
+      font-weight: 900;
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
+
+    .carousel-container {
+      width: 100%;
+      max-width: 1152px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .carousel-3d {
+      width: 100%;
+      aspect-ratio: 16 / 6;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      background: #111;
+      transition: aspect-ratio 0.4s ease;
+    }
+
+    .carousel-track {
+      display: flex;
+      width: 300%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.77,0,0.175,1);
+    }
+
+    .slide {
+      width: 33.33%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 6%;
+      text-align: center;
+    }
+
+    .slide-1 { background: linear-gradient(135deg, #1e1b4b, #312e81); }
+    .slide-2 { background: linear-gradient(135deg, #312e81, #4338ca); }
+    .slide-3 { background: linear-gradient(135deg, #4338ca, #6366f1); }
+
+    input[name="slides"] { display: none; }
+
+    #slide1:checked ~ .carousel-3d .carousel-track { transform: translateX(0); }
+    #slide2:checked ~ .carousel-3d .carousel-track { transform: translateX(-33.33%); }
+    #slide3:checked ~ .carousel-3d .carousel-track { transform: translateX(-66.66%); }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.9rem;
+      z-index: 10;
+    }
+
+    .carousel-dots label {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #slide1:checked ~ .carousel-dots label[for="slide1"],
+    #slide2:checked ~ .carousel-dots label[for="slide2"],
+    #slide3:checked ~ .carousel-dots label[for="slide3"] {
+      background: white;
+      transform: scale(1.35);
+      box-shadow: 0 0 12px rgba(255,255,255,0.5);
+    }
+
+    /* Mobilní carousel */
+    @media (max-width: 640px) {
+      .carousel-3d {
+        aspect-ratio: 1 / 1;
+        border-radius: 1rem;
+        min-height: 320px;
+        max-height: 82vh;
+      }
+      .slide h2 { font-size: clamp(2.1rem, 9.2vw, 3.8rem) !important; }
+      .slide p  { font-size: clamp(0.92rem, 3.7vw, 1.08rem) !important; max-width: 92%; }
+      .slide { padding: 0 7%; }
+    }
+
+    /* Video Player */
+    .video-wrapper {
+      width: 100%;
+      max-width: 1152px;
+      margin: 0 auto;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      background: #000;
+      line-height: 0;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Bento */
+    .bento {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .bento > div {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #777;
+    }
+
+    @media (min-width: 640px)  { .bento { grid-template-columns: repeat(2,1fr); } }
+    @media (min-width: 960px)  { .bento { grid-template-columns: repeat(3,1fr); } .carousel-3d { aspect-ratio: 16 / 4.5; } }
+
+    /* ────────────────────────────── OPRACENÝ FOOTER – mobilní verze kompaktní ────────────────────────────── */
+    footer {
+      border-top: 1px solid #222;
+      padding: 2.2rem 1.2rem 1.8rem;
+      background: rgba(0,0,0,0.25);
+      font-size: 0.92rem;
+      color: var(--text-dim);
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+    }
+
+    .footer-brand {
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-logo span { color: var(--accent); }
+
+    .yt-callout {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+    }
+
+    .link-group {
+      background: rgba(20,20,30,0.4);
+      padding: 1rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .link-group h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin-bottom: 0.7rem;
+      color: white;
+      opacity: 0.9;
+    }
+
+    .link-group a {
+      display: block;
+      color: var(--text-dim);
+      text-decoration: none;
+      margin-bottom: 0.45rem;
+      font-size: 0.94rem;
+      transition: color 0.16s;
+    }
+
+    .link-group a:hover {
+      color: white;
+    }
+
+    .bottom-bar {
+      margin-top: 1.6rem;
+      padding-top: 1rem;
+      border-top: 1px solid #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      opacity: 0.78;
+    }
+
+    .bottom-bar .online {
+      color: var(--green-online);
+      font-weight: bold;
+      letter-spacing: 0.06em;
+    }
+
+    /* Desktop footer */
+    @media (min-width: 768px) {
+      footer { padding: 3.2rem 2rem 2.2rem; }
+      .footer-content {
+        grid-template-columns: 1.2fr 2fr;
+        gap: 3.5rem;
+      }
+      .footer-brand { text-align: left; }
+      .footer-links {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      .link-group {
+        background: transparent;
+        padding: 0;
+        border: none;
+      }
+      .bottom-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 2rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-content { gap: 5rem; }
+      .link-group a { font-size: 1rem; }
+    }
+
+    @media (max-width: 380px) {
+      .footer-links { gap: 1.1rem; }
+      .link-group { padding: 0.9rem 1rem; }
+      .link-group h4 { font-size: 0.76rem; margin-bottom: 0.6rem; }
+      .link-group a { font-size: 0.9rem; margin-bottom: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <div class="hero">
+    <h1>Digital Café</h1>
+  </div>
+
+  <div class="carousel-container">
+    <input type="radio" name="slides" id="slide1" checked>
+    <input type="radio" name="slides" id="slide2">
+    <input type="radio" name="slides" id="slide3">
+
+    <div class="carousel-3d">
+      <div class="carousel-track">
+        <div class="slide slide-1">
+          <span class="text-indigo-300 text-xs font-bold tracking-widest uppercase mb-3">Technologie 2026</span>
+          <h2 class="text-4xl md:text-6xl font-black leading-tight">UMĚLÁ<br>INTELIGENCE</h2>
+          <p class="text-indigo-200/65 mt-5 text-sm md:text-base max-w-md">Generativní modely přímo v prohlížeči.</p>
+        </div>
+        <div class="slide slide-2">
+          <span class="text-indigo-300 text-xs font-bold tracking-widest uppercase mb-3">UX & UI</span>
+          <h2 class="text-4xl md:text-6xl font-black leading-tight">INTERAKTIVNÍ<br>DESIGN</h2>
+          <p class="text-indigo-200/65 mt-5 text-sm md:text-base max-w-md">Pohlcující prostředí bez kompromisů.</p>
+        </div>
+        <div class="slide slide-3">
+          <span class="text-indigo-300 text-xs font-bold tracking-widest uppercase mb-3">Výkon</span>
+          <h2 class="text-4xl md:text-6xl font-black leading-tight">RYCHLOST<br>SVĚTLA</h2>
+          <p class="text-indigo-200/65 mt-5 text-sm md:text-base max-w-md">Optimalizováno pro high-end zařízení.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-dots">
+      <label for="slide1"></label>
+      <label for="slide2"></label>
+      <label for="slide3"></label>
+    </div>
+  </div>
+
+  <div class="video-wrapper">
+    <video controls playsinline preload="metadata" poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+      <source src="1.mp4" type="video/mp4">
+      Váš prohlížeč nepodporuje přehrávání videa.
+    </video>
+  </div>
+
+  <div class="bento">
+    <div>Detail 1</div>
+    <div>Detail 2</div>
+    <div>Detail 3</div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">Digital<span>Café</span></div>
+      <p class="mb-4">Prémiový digitální prostor pro technologie roku 2026.</p>
+      <div class="yt-callout">Sledujte nás na YouTube</div>
+    </div>
+
+    <div class="footer-links">
+      <div class="link-group">
+        <h4>Obsah</h4>
+        <a href="#">Projekty</a>
+        <a href="#">Workshopy</a>
+        <a href="#">AI Lab</a>
+      </div>
+      <div class="link-group">
+        <h4>Komunita</h4>
+        <a href="#">Discord</a>
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+      </div>
+      <div class="link-group">
+        <h4>Podpora</h4>
+        <a href="#">Kontakt</a>
+        <a href="#">FAQ</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div>© 2026 Digital Café. Všechna práva vyhrazena.</div>
+    <div class="online">● SYSTEM ONLINE (LATENCY: 12MS)</div>
+  </div>
+</footer>
+
+</body>
+</html>
